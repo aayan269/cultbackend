@@ -55,7 +55,7 @@ app.put("/:id",async(req,res)=>{
 
 app.delete("/:id",async(req,res)=>{
     
-        const post=await PostModel.findById(req.params.id)
+        const post=await CartModel.findById(req.params.id)
       
            await CartModel.deleteOne(post);
            res.status(200).send("post has been deleted")
