@@ -65,6 +65,11 @@ app.delete("/:id",async(req,res)=>{
     })
 
 
+    app.delete("/",async(req,res)=>{
+        await CartModel.deleteMany({});
+        res.status(200).send("all post deleted")
+     })
+
     // app.get("/:id",async(req,res)=>{
         
     //     try{
