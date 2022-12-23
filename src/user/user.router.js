@@ -10,11 +10,11 @@ const {username,email,password}=req.body
 //console.log(username,email,password);
 const hash=await argon2.hash(password)
 const otp=Math.floor(Math.random()*10000)
-otps.email=otp
+otps.email=otp;
 try{
     const user=new UserModel({username,email,password:hash})
     await user.save()
-    return res.status(201).send("user created",otp)
+    return res.status(201).send({messgae:"user created",otp});
 
 }
 catch(e){
