@@ -4,14 +4,17 @@ const app=express.Router()
 const jwt=require("jsonwebtoken")
 const argon2=require("argon2")
 
+const otps={}
 app.post("/signup",async(req,res)=>{
 const {username,email,password}=req.body
 //console.log(username,email,password);
 const hash=await argon2.hash(password)
+const otp=Math.floor(Math.random()*10000)
+otps.email=otp
 try{
     const user=new UserModel({username,email,password:hash})
     await user.save()
-    return res.status(201).send("user created")
+    return res.status(201).send("user created",otp)
 
 }
 catch(e){
@@ -20,6 +23,16 @@ catch(e){
 }
 })
 
+app.post("/verification",(req,res)=>{
+    const otp=req.body;
+    console.log(otp,"hii",otps)
+    if(otps.email==otp.creds){
+        return res.send({message:"otp verified"})
+    }
+    else{
+        return res.status(401).send("please enter valid otp")
+    }
+})
 
 app.post("/login",async(req,res)=>{
     const {email,password}=req.body;
@@ -37,9 +50,7 @@ app.post("/login",async(req,res)=>{
   }
   else{
     return res.status(401).send("wrong credentials")
-}
-
-    
+} 
 })
 
 //update 
@@ -63,14 +74,6 @@ console.log(req.params.id,req.body.creds)
         }
     }
 })
-
-
-
-
-
-
-
-
 
 
 //delete
